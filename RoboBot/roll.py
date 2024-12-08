@@ -1,6 +1,12 @@
 import discord
 from discord.ext import commands
 import random, asyncio
+import json
+
+def load_images():
+  with open("./responses/lmkRolls.json", "r") as f:
+    return json.load(f)
+
 
 class Roll(commands.Cog):
   def __init__(self, bot):
@@ -8,19 +14,18 @@ class Roll(commands.Cog):
 
   @commands.command()
   @commands.cooldown(1, 86400, commands.BucketType.user)
-  async def lmkroll(self, ctx):
-    with open("./responses/lmkRolls.txt", "r") as f:
-      character = f.readlines()
-      responses = random.choice(character)
-    await ctx.send(f'You got {responses[:-1]}!')
-  
-  @commands.command()
-  @commands.cooldown(1, 86400, commands.BucketType.user)
-  async def tohroll(self, ctx):
-    with open("./responses/tohRolls.txt", "r") as f:
-      character = f.readlines()
-      responses = random.choice(character)
-    await ctx.send(f'You got {responses[:-1]}!')
+  async def roll(self, ctx):
+    data = load_images()
+    characters = data["characters"]
+    selection = random.choice(characters)
+    
+    name = selection["name"]
+    image = selection["image"]
+    
+    
+    embed = discord.Embed(title=f"You got {name}!")
+    embed.set_image(url=image)
+    await ctx.send(embed=embed)
 
   @commands.Cog.listener()
   async def on_command_completion(self, ctx):

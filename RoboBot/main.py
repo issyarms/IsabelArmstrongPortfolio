@@ -10,7 +10,7 @@ TOKEN = os.getenv("TOKEN")
 
 
 def run():
-  bot = commands.Bot(command_prefix=">", intents=discord.Intents.all(), activity=discord.Game(">help"))
+  bot = commands.Bot(command_prefix="!", intents=discord.Intents.all(), activity=discord.Game("!help"))
 
   @bot.event
   async def on_ready():
